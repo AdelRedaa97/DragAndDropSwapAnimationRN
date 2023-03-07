@@ -12,8 +12,7 @@
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.71.3",
-    "react-native-image-picker": "^3.1.2",
-    "react-native-vector-icons": "^7.0.0"
+    "react-native-image-picker": "^3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
