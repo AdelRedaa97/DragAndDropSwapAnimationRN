@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { StyleSheet, Animated, PanResponder } from "react-native";
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Animated, PanResponder, View } from 'react-native';
+import { IDraggableProps } from '../definitions/components/draggable';
 
-export default Draggable = ({
+const Draggable = ({
   index,
   position,
   movingDraggable,
@@ -10,13 +11,13 @@ export default Draggable = ({
   onReleaseDraggable,
   swap,
   renderChild,
-}) => {
-  const animatedView = useRef();
+}: IDraggableProps): JSX.Element => {
+  const animatedView = useRef<View>();
   const [zIndex, setZIndex] = useState(0);
   const [isMovedOver, setIsMovedOver] = useState(false);
 
   useEffect(() => {
-    animatedView.current.measure((x, y, width, height, pageX, pageY) => {
+    animatedView?.current?.measure((x, y, width, height, pageX, pageY) => {
       if (
         movingDraggable &&
         movingDraggable.index != index &&
@@ -34,7 +35,7 @@ export default Draggable = ({
   }, [movingDraggable]);
 
   useEffect(() => {
-    animatedView.current.measure((x, y, width, height, pageX, pageY) => {
+    animatedView?.current?.measure((x, y, width, height, pageX, pageY) => {
       if (
         releaseDraggable &&
         releaseDraggable.index != index &&
@@ -51,7 +52,7 @@ export default Draggable = ({
     });
   }, [releaseDraggable]);
 
-  const pan = useRef(new Animated.ValueXY());
+  const pan = useRef<any>(new Animated.ValueXY());
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -67,17 +68,14 @@ export default Draggable = ({
           });
           pan.current.setValue({ x: 0, y: 0 });
         },
-        onPanResponderMove: Animated.event(
-          [null, { dx: pan.current.x, dy: pan.current.y }],
-          {
-            useNativeDriver: false,
-            listener: (evt) => {
-              const { pageX, pageY } = evt.nativeEvent;
-              // console.log("Moving ", index, " - ", pageX, pageY)
-              onMovingDraggable({ index, pageX, pageY });
-            },
-          }
-        ),
+        onPanResponderMove: Animated.event([null, { dx: pan.current.x, dy: pan.current.y }], {
+          useNativeDriver: false,
+          listener: (evt: any) => {
+            const { pageX, pageY } = evt.nativeEvent;
+            // console.log("Moving ", index, " - ", pageX, pageY)
+            onMovingDraggable({ index, pageX, pageY });
+          },
+        }),
         onPanResponderRelease: (evt, gestureState) => {
           /* some action */
           setZIndex(0);
@@ -101,7 +99,7 @@ export default Draggable = ({
           }
         },
       }),
-    []
+    [],
   );
 
   const panStyle = { transform: pan.current.getTranslateTransform() };
@@ -109,22 +107,10 @@ export default Draggable = ({
     <Animated.View
       {...panResponder.panHandlers}
       ref={animatedView}
-      style={[panStyle, styles.shadow, position, { zIndex: zIndex }]}
-    >
+      style={{ ...panStyle, ...position, ...{ zIndex: zIndex } }}>
       {renderChild(isMovedOver)}
     </Animated.View>
   );
 };
 
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-});
+export default Draggable;
