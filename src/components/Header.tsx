@@ -1,11 +1,7 @@
 import React from 'react';
-import { View, Text, Pressable, GestureResponderEvent } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import { IHeaderProps } from '../definitions/components/header';
 import { styles } from '../styles';
-
-interface IHeaderProps {
-  style?: object[];
-  onPressAddItem?: (event: GestureResponderEvent) => void;
-}
 
 const Header = ({ style, onPressAddItem = () => {} }: IHeaderProps): JSX.Element => {
   return (

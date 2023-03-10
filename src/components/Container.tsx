@@ -1,11 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StatusBar, Text } from 'react-native';
+import { IContainerProps } from '../definitions/components/container';
 import { styles } from '../styles';
-
-interface IContainerProps {
-  children: React.ReactNode;
-  style?: object[];
-}
 
 const Container = ({ children, style }: IContainerProps): JSX.Element => {
   return (
